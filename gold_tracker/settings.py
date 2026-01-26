@@ -20,10 +20,10 @@ ALLOWED_HOSTS = [
 ]
 
 # Application definition
-INSTALLED_APPS = [
+IINSTALLED_APPS = [
     'django.contrib.staticfiles',
+    'api',  
 ]
-
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
