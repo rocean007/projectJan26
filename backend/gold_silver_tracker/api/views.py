@@ -265,3 +265,4 @@ def health_check(request):
         'gold_premium': '10.08%',
         'silver_premium': '12.66%'
     })
+    
