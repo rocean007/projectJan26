@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>सुन र चाँदीको लाइभ मूल्य</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a14;
+            --bg-secondary: #1a1a2e;
+            --card-bg: rgba(25, 25, 40, 0.9);
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --gold-color: #FFD700;
+            --silver-color: #C0C0C0;
+            --positive-color: #2ecc71;
+            --negative-color: #e74c3c;
+            --border-color: rgba(255, 215, 0, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --chart-height: 600px; /* UPDATED from 850px */
+            --chart-container-height: 650px; /* UPDATED from 900px */
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --gold-color: #D4AF37;
+            --silver-color: #808080;
+            --positive-color: #27ae60;
+            --negative-color: #c0392b;
+            --border-color: rgba(212, 175, 55, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Mukta', system-ui, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1800px;
+            }
+        }
+
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .container {
+                max-width: 1600px;
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .container {
+                max-width: 1400px;
+            }
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-toggle-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .theme-toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 34px;
+            transition: .4s;
+        }
+
+        .theme-toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 3px;
+            background: var(--gold-color);
+            border-radius: 50%;
+            transition: .4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            font-size: 12px;
+        }
+
+        [data-theme="light"] .theme-toggle-slider {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        input:checked + .theme-toggle-slider {
+            background: rgba(255, 215, 0, 0.3);
+        }
+
+        input:checked + .theme-toggle-slider:before {
+            transform: translateX(28px);
+        }
+
+        .theme-toggle-slider .moon-icon {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--bg-primary);
+            font-size: 12px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .theme-toggle-slider .sun-icon {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--bg-primary);
+            font-size: 12px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        input:checked + .theme-toggle-slider .moon-icon {
+            opacity: 0.5;
+        }
+
+        input:checked + .theme-toggle-slider .sun-icon {
+            opacity: 1;
+        }
+
+        /* NEW: Compact header with exchange rate and calculator side by side */
+        .header-with-calculator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: stretch;
+        }
+
+        .exchange-tracker-compact {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(30, 30, 50, 0.8);
+            border-radius: 10px;
+            padding: 15px 20px;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        [data-theme="light"] .exchange-tracker-compact {
+            background: rgba(240, 240, 250, 0.9);
+        }
+
+        .exchange-tracker-compact h3 {
+            color: #3498db;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exchange-rate-compact {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--positive-color);
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+
+        .backend-status-compact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: auto;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-connected {
+            background-color: var(--positive-color);
+            animation: pulse 2s infinite;
+        }
+
+        .status-disconnected {
+            background-color: var(--negative-color);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* NEW: Compact calculator styling */
+        .calculator-compact {
+            flex: 1;
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calculator-compact h3 {
+            color: var(--gold-color);
+            font-size: 1rem;
+            margin-bottom: 12px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .calculator-controls-compact {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .calculator-input-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .calculator-input-compact label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .calculator-input-compact select,
+        .calculator-input-compact input {
+            padding: 8px 10px;
+            background: rgba(30, 30, 50, 0.9);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            border-radius: 6px;
+            color: var(--gold-color);
+            font-size: 0.85rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .calculator-input-compact select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFD700' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-color: rgba(30, 30, 50, 0.9);
+            padding-right: 30px;
+            cursor: pointer;
+        }
+
+        .calculator-input-compact select option {
+            background: rgba(26, 26, 40, 0.95);
+            color: var(--gold-color);
+            padding: 8px;
+        }
+
+        [data-theme="light"] .calculator-input-compact select,
+        [data-theme="light"] .calculator-input-compact input {
+            background: rgba(240, 240, 250, 0.95);
+            border: 1.5px solid rgba(212, 175, 55, 0.4);
+            color: var(--gold-color);
+        }
+
+        [data-theme="light"] .calculator-input-compact select option {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--gold-color);
+        }
+
+        .calculator-input-compact input:focus,
+        .calculator-input-compact select:focus {
+            outline: none;
+            border-color: var(--gold-color);
+        }
+
+        .calculator-result-compact {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        [data-theme="light"] .calculator-result-compact {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .result-row-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="light"] .result-row-compact {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .result-row-compact:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .result-label-compact {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .result-value-compact {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gold-color);
+            font-family: 'Consolas', 'Monaco', monospace;
+            text-align: right;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .npr-result-compact {
+            color: var(--positive-color);
+        }
+
+        /* Main header styling */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            background: rgba(255, 215, 0, 0.08);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            word-wrap: break-word;
+        }
+
+        [data-theme="light"] header {
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 2.3rem);
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--gold-color), #D4AF37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .price-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px var(--shadow-color);
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .price-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+
+        [data-theme="light"] .card-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .metal-icon {
+            font-size: 2.2rem;
+            margin-right: 15px;
+            color: var(--gold-color);
+            flex-shrink: 0;
+        }
+
+        .silver-icon {
+            color: var(--silver-color);
+        }
+
+        .metal-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold-color);
+            word-break: break-word;
+        }
+
+        .silver-name {
+            color: var(--silver-color) !important;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        [data-theme="light"] .price-row {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .currency-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .price-value {
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            font-weight: 700;
+            font-family: 'Consolas', 'Monaco', monospace;
+            text-align: right;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .gold-price {
+            color: var(--gold-color);
+        }
+
+        .silver-price {
+            color: var(--silver-color);
+        }
+
+        .npr-price {
+            color: var(--positive-color);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .timeframe-btn, .metal-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: var(--gold-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        [data-theme="light"] .timeframe-btn,
+        [data-theme="light"] .metal-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.3);
+            color: var(--gold-color);
+        }
+
+        .timeframe-btn:hover, .metal-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .timeframe-btn.active, .metal-btn.active {
+            background: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .chart-section {
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            margin-bottom: 20px;
+            height: 650px; /* UPDATED from 900px */
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-title {
+            color: var(--gold-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #tv-chart {
+            width: 100% !important;
+            height: 600px !important; /* UPDATED from 850px */
+            min-height: 500px;
+            position: relative;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 1.1rem;
+            color: var(--gold-color);
+            text-align: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .last-update {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 10px;
+            word-break: break-word;
+        }
+
+        .update-speed {
+            color: var(--gold-color);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            word-break: break-word;
+        }
+
+        [data-theme="light"] footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .disclaimer {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--negative-color);
+            line-height: 1.4;
+        }
+
+        /* Error message styling */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            color: var(--negative-color);
+            text-align: center;
+            display: none;
+        }
+
+        .price-update {
+            animation: priceUpdate 0.5s ease;
+        }
+
+        @keyframes priceUpdate {
+            0% { background-color: rgba(46, 204, 113, 0.1); }
+            100% { background-color: transparent; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-with-calculator {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .exchange-tracker-compact,
+            .calculator-compact {
+                min-width: 100%;
+            }
+            
+            .calculator-controls-compact {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .chart-container {
+                height: 500px; /* UPDATED from 600px */
+            }
+            
+            #tv-chart {
+                height: 450px !important; /* UPDATED from 550px */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chart-container {
+                height: 400px; /* UPDATED from 450px */
+            }
+            
+            #tv-chart {
+                height: 350px !important; /* UPDATED from 400px */
+            }
+            
+            .calculator-controls-compact {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-row-compact {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 3px;
+                padding: 8px 0;
+            }
+            
+            .result-value-compact {
+                text-align: left;
+                font-size: 1rem;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .chart-container {
+                height: 70vh;
+            }
+            
+            #tv-chart {
+                height: 65vh !important;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="dark">
+    <div class="container">
+        <div class="header-top">
+            <div></div> <!-- Empty div for spacing -->
+            <div class="theme-toggle-container">
+                <span class="theme-toggle-label">Theme:</span>
+                <label class="theme-toggle-switch">
+                    <input type="checkbox" id="theme-toggle-checkbox">
+                    <span class="theme-toggle-slider">
+                        <i class="fas fa-moon moon-icon"></i>
+                        <i class="fas fa-sun sun-icon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <header>
+            <h1><i class="fas fa-gem"></i> सुन र चाँदीको लाइभ मूल्य</h1>
+            <p class="subtitle">Live Gold & Silver Prices with Real-time NPR Conversion</p>
+        </header>
+
+        <!-- NEW: Compact header with exchange rate and calculator -->
+        <div class="header-with-calculator">
+            <div class="exchange-tracker-compact">
+                <h3><i class="fas fa-exchange-alt"></i> USD/NPR Live Exchange Rate</h3>
+                <div class="exchange-rate-compact" id="usd-npr-rate">1 USD = NPR 133.50</div>
+                <div class="backend-status-compact">
+                    <span class="status-indicator status-connected" id="backend-status-indicator"></span>
+                    <span id="backend-status-text">Backend Connected</span>
+                </div>
+            </div>
+
+            <div class="calculator-compact">
+                <h3><i class="fas fa-calculator"></i> मूल्य क्यालकुलेटर</h3>
+                
+                <div class="calculator-controls-compact">
+                    <div class="calculator-input-compact">
+                        <label>धातु:</label>
+                        <select id="calc-metal-compact">
+                            <option value="gold">सुन</option>
+                            <option value="silver">चाँदी</option>
+                        </select>
+                    </div>
+                    
+                    <div class="calculator-input-compact">
+                        <label>एकाइ:</label>
+                        <select id="calc-unit-compact">
+                            <option value="tola">तोला</option>
+                            <option value="kg">किलो</option>
+                        </select>
+                    </div>
+                    
+                    <div class="calculator-input-compact">
+                        <label>मात्रा:</label>
+                        <input type="number" id="calc-amount-compact" min="0.01" step="0.01" value="1.00">
+                    </div>
+                    
+                    <div class="calculator-input-compact">
+                        <label>मुद्रा:</label>
+                        <select id="calc-currency-compact">
+                            <option value="npr">रुपैयाँ</option>
+                            <option value="usd">डलर</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="calculator-result-compact">
+                    <div class="result-row-compact">
+                        <span class="result-label-compact">कुल मूल्य:</span>
+                        <span id="calc-total-compact" class="result-value-compact npr-result-compact">NPR 284,473.69</span>
+                    </div>
+                    <div class="result-row-compact">
+                        <span class="result-label-compact">प्रति एकाइ:</span>
+                        <span id="calc-unit-price-compact" class="result-value-compact">NPR 284,473.69</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error message container -->
+        <div class="error-message" id="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="error-text">Unable to fetch prices. Using cached data.</span>
+        </div>
+
+        <div class="price-container">
+            <div class="price-card">
+                <div class="card-header">
+                    <div class="metal-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div>
+                        <div class="metal-name">GOLD (XAU/USD)</div>
+                    </div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-dollar-sign"></i> Live Price (USD):
+                    </div>
+                    <div id="gold-usd" class="price-value gold-price">$2,150.75</div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-rupee-sign"></i> Price in NPR:
+                    </div>
+                    <div id="gold-npr" class="price-value npr-price">NPR 284,473.69</div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-weight"></i> Per Tola (11.66g):
+                    </div>
+                    <div id="gold-tola" class="price-value gold-price">NPR 331,898</div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-weight"></i> Per Kg:
+                    </div>
+                    <div id="gold-kg" class="price-value gold-price">NPR 28,475,120</div>
+                </div>
+            </div>
+
+            <div class="price-card">
+                <div class="card-header">
+                    <div class="metal-icon silver-icon">
+                        <i class="fas fa-ring"></i>
+                    </div>
+                    <div>
+                        <div class="metal-name silver-name">SILVER (XAG/USD)</div>
+                    </div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-dollar-sign"></i> Live Price (USD):
+                    </div>
+                    <div id="silver-usd" class="price-value silver-price">$24.38</div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-rupee-sign"></i> Price in NPR:
+                    </div>
+                    <div id="silver-npr" class="price-value npr-price">NPR 3,256.95</div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-weight"></i> Per Tola (11.66g):
+                    </div>
+                    <div id="silver-tola" class="price-value silver-price">NPR 3,761</div>
+                </div>
+                
+                <div class="price-row">
+                    <div class="currency-label">
+                        <i class="fas fa-weight"></i> Per Kg:
+                    </div>
+                    <div id="silver-kg" class="price-value silver-price">NPR 322,415</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="metal-toggle">
+                <button class="metal-btn active" data-metal="gold">
+                    <i class="fas fa-crown"></i> Gold (XAUUSD)
+                </button>
+                <button class="metal-btn" data-metal="silver">
+                    <i class="fas fa-ring"></i> Silver (XAGUSD)
+                </button>
+            </div>
+            
+            <div class="timeframe-toggle">
+                <button class="timeframe-btn" data-timeframe="15">15M</button>
+                <button class="timeframe-btn" data-timeframe="60">1H</button>
+                <button class="timeframe-btn active" data-timeframe="240">4H</button>
+                <button class="timeframe-btn" data-timeframe="D">1D</button>
+                <button class="timeframe-btn" data-timeframe="W">1W</button>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-chart-line"></i> TradingView Live Chart
+                </div>
+                <div id="tv-chart">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading TradingView Chart...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="last-update">
+            <i class="fas fa-sync-alt fa-spin"></i> <span class="update-speed">Real-time Updates (3s)</span> | 
+            Last Updated: <span id="update-time">Loading...</span> |
+            Chart: <span id="current-symbol">XAU/USD</span> - <span id="current-timeframe">4H</span>
+        </div>
+
+        <footer>
+            <p>Backend API & TradingView द्वारा संचालित | Real-time मूल्यहरू</p>
+            <div class="disclaimer">
+                <i class="fas fa-exclamation-triangle"></i> यो प्रदर्शन अनुप्रयोग हो। वास्तविक व्यापारको लागि विश्वसनीय स्रोतहरू प्रयोग गर्नुहोस्।
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Section - FIXED for Django Backend -->
+        <!-- JavaScript Section - FIXED for Django Backend -->
+    <script>
+        (function() {
+            'use strict';
+            
+            // Constants
+            const TOLA_TO_GRAMS = 11.6638;
+            const GRAMS_PER_TROY_OUNCE = 31.1035;
+            
+            // State variables
+            let goldPriceUSD = 2150.75;
+            let silverPriceUSD = 24.38;
+            let usdToNprRate = 133.50;
+            let currentTimeframe = '240';
+            let currentSymbol = "XAUUSD";
+            let tvWidget = null;
+            
+            // IMPORTANT: Use relative URL for Django backend
+            // When HTML is served by Django, use relative path
+            // When testing locally, adjust this to match your setup
+            const DJANGO_BACKEND_URL = 'http://127.0.0.1:8000/api/prices/';
+            
+            // Cache for prices
+            let priceCache = {
+                gold: 2150.75,
+                silver: 24.38,
+                exchange: 133.50,
+                timestamp: Date.now()
+            };
+
+            // Backend connection status
+            let backendConnected = false;
+            let retryCount = 0;
+            const MAX_RETRIES = 3;
+            let requestTimeout = null;
+
+            // Format currency with English numerals
+            function formatCurrency(value, decimals = 2, currency = 'USD') {
+                if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
+                    return 'Loading...';
+                }
+                
+                const safeDecimals = Math.min(Math.max(0, decimals), 10);
+                
+                if (currency === 'NPR') {
+                    return `NPR ${value.toLocaleString('en-US', {
+                        minimumFractionDigits: safeDecimals,
+                        maximumFractionDigits: safeDecimals
+                    })}`;
+                }
+                return `$${value.toLocaleString('en-US', {
+                    minimumFractionDigits: safeDecimals,
+                    maximumFractionDigits: safeDecimals
+                })}`;
+            }
+
+            // Fetch all prices from Django backend
+            async function fetchPricesFromBackend() {
+                if (requestTimeout) {
+                    clearTimeout(requestTimeout);
+                }
+                
+                try {
+                    console.log('📡 Fetching prices from Django backend...');
+                    const controller = new AbortController();
+                    requestTimeout = setTimeout(() => controller.abort(), 5000);
+                    
+                    const response = await fetch(DJANGO_BACKEND_URL, {
+                        signal: controller.signal,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        cache: 'no-cache'
+                    });
+                    
+                    clearTimeout(requestTimeout);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Backend error: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('✅ Django backend response:', data);
+                    
+                    // Check if we got the expected response format from your Django view
+                    if (data.status === 'success' && data.data) {
+                        const prices = data.data;
+                        
+                        // Extract prices from your Django response
+                        const goldPrice = parseFloat(prices.gold_usd);
+                        const silverPrice = parseFloat(prices.silver_usd);
+                        const exchangeRate = parseFloat(prices.exchange_rate);
+                        
+                        // Validate prices are reasonable
+                        const safeGoldPrice = Math.max(100, Math.min(10000, goldPrice));
+                        const safeSilverPrice = Math.max(10, Math.min(1000, silverPrice));
+                        const safeExchangeRate = Math.max(50, Math.min(500, exchangeRate));
+                        
+                        // Update cache
+                        priceCache = {
+                            gold: safeGoldPrice,
+                            silver: safeSilverPrice,
+                            exchange: safeExchangeRate,
+                            timestamp: Date.now()
+                        };
+                        
+                        backendConnected = true;
+                        retryCount = 0;
+                        updateBackendStatus(true);
+                        
+                        // Return the data from backend exactly as it is
+                        // Your backend already calculates all these values
+                        return {
+                            gold_usd: safeGoldPrice,
+                            silver_usd: safeSilverPrice,
+                            exchange_rate: safeExchangeRate,
+                            gold_npr: parseFloat(prices.gold_npr),
+                            silver_npr: parseFloat(prices.silver_npr),
+                            gold_tola_npr: parseFloat(prices.gold_tola_npr),
+                            silver_tola_npr: parseFloat(prices.silver_tola_npr),
+                            gold_kg_npr: parseFloat(prices.gold_kg_npr),
+                            silver_kg_npr: parseFloat(prices.silver_kg_npr)
+                        };
+                    } else if (data.status === 'error' && data.data) {
+                        // Even on error, your backend returns data
+                        const prices = data.data;
+                        return {
+                            gold_usd: parseFloat(prices.gold_usd),
+                            silver_usd: parseFloat(prices.silver_usd),
+                            exchange_rate: parseFloat(prices.exchange_rate),
+                            gold_npr: parseFloat(prices.gold_npr),
+                            silver_npr: parseFloat(prices.silver_npr),
+                            gold_tola_npr: parseFloat(prices.gold_tola_npr),
+                            silver_tola_npr: parseFloat(prices.silver_tola_npr),
+                            gold_kg_npr: parseFloat(prices.gold_kg_npr),
+                            silver_kg_npr: parseFloat(prices.silver_kg_npr)
+                        };
+                    } else {
+                        throw new Error('Invalid response structure');
+                    }
+                    
+                } catch (error) {
+                    console.log('⚠️ Backend fetch error:', error.message);
+                    
+                    backendConnected = false;
+                    retryCount++;
+                    updateBackendStatus(false);
+                    
+                    // Use cached prices if available and not too old (5 minutes)
+                    if (Date.now() - priceCache.timestamp < 300000) {
+                        console.log('Using cached prices');
+                        const goldNPR = priceCache.gold * priceCache.exchange;
+                        const silverNPR = priceCache.silver * priceCache.exchange;
+                        
+                        const goldPerGram = priceCache.gold / GRAMS_PER_TROY_OUNCE;
+                        const silverPerGram = priceCache.silver / GRAMS_PER_TROY_OUNCE;
+                        
+                        const goldTolaNPR = goldPerGram * TOLA_TO_GRAMS * priceCache.exchange;
+                        const silverTolaNPR = silverPerGram * TOLA_TO_GRAMS * priceCache.exchange;
+                        
+                        const goldKgNPR = goldPerGram * 1000 * priceCache.exchange;
+                        const silverKgNPR = silverPerGram * 1000 * priceCache.exchange;
+                        
+                        return {
+                            gold_usd: priceCache.gold,
+                            silver_usd: priceCache.silver,
+                            exchange_rate: priceCache.exchange,
+                            gold_npr: goldNPR,
+                            silver_npr: silverNPR,
+                            gold_tola_npr: goldTolaNPR,
+                            silver_tola_npr: silverTolaNPR,
+                            gold_kg_npr: goldKgNPR,
+                            silver_kg_npr: silverKgNPR
+                        };
+                    }
+                    
+                    // Fallback to default prices
+                    return {
+                        gold_usd: 2150.75,
+                        silver_usd: 24.38,
+                        exchange_rate: 133.50,
+                        gold_npr: 287150.75,
+                        silver_npr: 3256.95,
+                        gold_tola_npr: 331898,
+                        silver_tola_npr: 3761,
+                        gold_kg_npr: 28475120,
+                        silver_kg_npr: 322415
+                    };
+                }
+            }
+
+            // Update backend connection status display
+            function updateBackendStatus(connected) {
+                const indicator = document.getElementById('backend-status-indicator');
+                const statusText = document.getElementById('backend-status-text');
+                const errorMessage = document.getElementById('error-message');
+                const errorText = document.getElementById('error-text');
+                
+                if (connected) {
+                    indicator.className = 'status-indicator status-connected';
+                    statusText.textContent = 'Django Backend Connected ✓';
+                    errorMessage.style.display = 'none';
+                } else {
+                    indicator.className = 'status-indicator status-disconnected';
+                    if (retryCount >= MAX_RETRIES) {
+                        statusText.textContent = 'Using Fallback Data';
+                        errorText.textContent = 'Backend connection failed. Showing fallback prices.';
+                    } else {
+                        statusText.textContent = `Connecting... (${retryCount}/${MAX_RETRIES})`;
+                        errorText.textContent = 'Connecting to Django backend...';
+                    }
+                    errorMessage.style.display = 'block';
+                }
+            }
+
+            // Initialize TradingView widget - UPDATED VERSION
+            function initTradingViewChart() {
+                if (tvWidget !== null) {
+                    tvWidget.remove();
+                    tvWidget = null;
+                }
+                
+                const chartContainer = document.getElementById('tv-chart');
+                chartContainer.innerHTML = '';
+                
+                const theme = document.body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                
+                // Calculate better container height
+                const container = chartContainer.parentElement;
+                const containerHeight = Math.min(Math.max(500, window.innerHeight * 0.6), 700);
+                
+                if (typeof TradingView === 'undefined') {
+                    chartContainer.innerHTML = '<div class="loading">TradingView chart unavailable</div>';
+                    return;
+                }
+                
+                tvWidget = new TradingView.widget({
+                    "width": "100%",
+                    "height": containerHeight + "px",
+                    "symbol": currentSymbol,
+                    "interval": currentTimeframe,
+                    "timezone": "Asia/Kathmandu",
+                    "theme": theme,
+                    "style": "1",
+                    "locale": "en",
+                    "toolbar_bg": theme === 'dark' ? "#1a1a2e" : "#f0f2f5",
+                    "enable_publishing": false,
+                    "hide_side_toolbar": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "details": true,
+                    "hotlist": true,
+                    "calendar": false,
+                    "show_popup_button": true,
+                    "popup_width": "1000",
+                    "popup_height": "650",
+                    "studies": [
+                        "MASimple@tv-basicstudies",
+                        "Volume@tv-basicstudies",
+                        "RSI@tv-basicstudies"
+                    ],
+                    "container_id": "tv-chart",
+                    "autosize": false,
+                    "disabled_features": [
+                        "use_localstorage_for_settings",
+                        "header_widget_dom_node"
+                    ],
+                    "enabled_features": [
+                        "study_templates",
+                        "move_logo_to_main_pane",
+                        "side_toolbar_in_fullscreen_mode"
+                    ],
+                    "overrides": {
+                        "mainSeriesProperties.showCountdown": false,
+                        "paneProperties.background": theme === 'dark' ? "#1a1a2e" : "#f0f2f5",
+                        "paneProperties.vertGridProperties.color": theme === 'dark' ? "#2a2a3e" : "#e0e0e0",
+                        "paneProperties.horzGridProperties.color": theme === 'dark' ? "#2a2a3e" : "#e0e0e0",
+                        "symbolWatermarkProperties.transparency": 90,
+                        "scalesProperties.textColor": theme === 'dark' ? "#AAA" : "#666",
+                        "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
+                        "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
+                        "mainSeriesProperties.candleStyle.upColor": "#26a69a",
+                        "mainSeriesProperties.candleStyle.downColor": "#ef5350",
+                        "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
+                        "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350"
+                    },
+                    "studies_overrides": {
+                        "volume.volume.color.0": theme === 'dark' ? "#26a69a" : "#26a69a",
+                        "volume.volume.color.1": theme === 'dark' ? "#ef5350" : "#ef5350",
+                        "volume.volume.transparency": 70,
+                        "rsi.rsi.plotcolor": "#FF6B6B",
+                        "rsi.rsi.linewidth": 2,
+                        "moving average.plot.color": "#FFD700",
+                        "moving average.linewidth": 2
+                    }
+                });
+                
+                document.getElementById('current-symbol').textContent = 
+                    currentSymbol === 'XAUUSD' ? 'XAU/USD' : 'XAG/USD';
+                document.getElementById('current-timeframe').textContent = 
+                    getTimeframeLabel(currentTimeframe);
+            }
+
+            function getTimeframeLabel(timeframe) {
+                const labels = {
+                    '15': '15M',
+                    '60': '1H',
+                    '240': '4H',
+                    'D': '1D',
+                    'W': '1W'
+                };
+                return labels[timeframe] || timeframe;
+            }
+
+            // Fetch and update prices from Django backend
+            async function updatePriceVariables() {
+                try {
+                    const prices = await fetchPricesFromBackend();
+                    
+                    if (prices && typeof prices === 'object') {
+                        // Update global price variables
+                        goldPriceUSD = prices.gold_usd;
+                        silverPriceUSD = prices.silver_usd;
+                        usdToNprRate = prices.exchange_rate;
+                        
+                        // Update all displays with real data FROM BACKEND
+                        updateAllDisplaysWithBackendData(prices);
+                        
+                        // Update compact calculator with new prices
+                        updateCompactCalculatorWithBackendData(prices);
+                    } else {
+                        throw new Error('Invalid price data');
+                    }
+                    
+                } catch (error) {
+                    console.log('Failed to update prices:', error);
+                    // Fallback to calculated prices
+                    updateAllDisplays();
+                    updateCompactCalculator();
+                }
+            }
+
+            // Update all displays using BACKEND response (already calculated)
+            function updateAllDisplaysWithBackendData(prices) {
+                const now = new Date();
+                
+                // Update gold prices - using backend-calculated values
+                document.getElementById('gold-usd').textContent = formatCurrency(prices.gold_usd, 2, 'USD');
+                document.getElementById('gold-npr').textContent = formatCurrency(prices.gold_npr, 2, 'NPR');
+                document.getElementById('gold-tola').textContent = formatCurrency(prices.gold_tola_npr, 0, 'NPR');
+                document.getElementById('gold-kg').textContent = formatCurrency(prices.gold_kg_npr, 0, 'NPR');
+                
+                // Update silver prices - using backend-calculated values
+                document.getElementById('silver-usd').textContent = formatCurrency(prices.silver_usd, 3, 'USD');
+                document.getElementById('silver-npr').textContent = formatCurrency(prices.silver_npr, 2, 'NPR');
+                document.getElementById('silver-tola').textContent = formatCurrency(prices.silver_tola_npr, 2, 'NPR'); // 2 decimals for silver tola
+                document.getElementById('silver-kg').textContent = formatCurrency(prices.silver_kg_npr, 0, 'NPR');
+                
+                // Update exchange rate
+                document.getElementById('usd-npr-rate').textContent = 
+                    `1 USD = NPR ${prices.exchange_rate.toFixed(2)}`;
+                
+                // Update timestamp
+                document.getElementById('update-time').textContent = 
+                    now.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                
+                // Add animation for price updates
+                animatePriceUpdate('gold-usd');
+                animatePriceUpdate('silver-usd');
+            }
+
+            // Update compact calculator with BACKEND data (already calculated)
+            function updateCompactCalculatorWithBackendData(prices) {
+                const metal = document.getElementById('calc-metal-compact').value;
+                const unit = document.getElementById('calc-unit-compact').value;
+                
+                const amountInput = document.getElementById('calc-amount-compact');
+                let amount = parseFloat(amountInput.value) || 1;
+                
+                // Validate amount
+                amount = Math.max(0.01, Math.min(1000000, amount));
+                amountInput.value = amount.toFixed(2);
+                
+                const currency = document.getElementById('calc-currency-compact').value;
+                
+                // Get unit price DIRECTLY from backend data
+                let unitPrice, totalValue;
+                
+                if (unit === 'tola') {
+                    unitPrice = metal === 'gold' ? prices.gold_tola_npr : prices.silver_tola_npr;
+                } else { // kg
+                    unitPrice = metal === 'gold' ? prices.gold_kg_npr : prices.silver_kg_npr;
+                }
+                
+                totalValue = unitPrice * amount;
+                
+                // Handle invalid values
+                if (!isFinite(unitPrice) || !isFinite(totalValue)) {
+                    unitPrice = 0;
+                    totalValue = 0;
+                }
+                
+                // Convert to USD if selected
+                if (currency === 'usd') {
+                    unitPrice = unitPrice / prices.exchange_rate;
+                    totalValue = totalValue / prices.exchange_rate;
+                }
+                
+                // Update compact calculator display
+                document.getElementById('calc-unit-price-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(unitPrice, unit === 'tola' ? (metal === 'gold' ? 0 : 2) : 0, 'USD') : 
+                    formatCurrency(unitPrice, unit === 'tola' ? (metal === 'gold' ? 0 : 2) : 0, 'NPR');
+                
+                document.getElementById('calc-total-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(totalValue, 2, 'USD') : 
+                    formatCurrency(totalValue, 2, 'NPR');
+                
+                // Update class for NPR vs USD color
+                const totalElement = document.getElementById('calc-total-compact');
+                if (currency === 'npr') {
+                    totalElement.classList.add('npr-result-compact');
+                } else {
+                    totalElement.classList.remove('npr-result-compact');
+                }
+            }
+
+            // Fallback display update (if API fails)
+            function updateAllDisplays() {
+                // Calculate prices from current variables
+                const goldNPR = goldPriceUSD * usdToNprRate;
+                const silverNPR = silverPriceUSD * usdToNprRate;
+                
+                const goldPerGram = goldPriceUSD / GRAMS_PER_TROY_OUNCE;
+                const silverPerGram = silverPriceUSD / GRAMS_PER_TROY_OUNCE;
+                
+                const goldTolaNPR = goldPerGram * TOLA_TO_GRAMS * usdToNprRate;
+                const silverTolaNPR = silverPerGram * TOLA_TO_GRAMS * usdToNprRate;
+                
+                const goldKgNPR = goldPerGram * 1000 * usdToNprRate;
+                const silverKgNPR = silverPerGram * 1000 * usdToNprRate;
+                
+                const now = new Date();
+                
+                // Update displays
+                document.getElementById('gold-usd').textContent = formatCurrency(goldPriceUSD, 2, 'USD');
+                document.getElementById('gold-npr').textContent = formatCurrency(goldNPR, 2, 'NPR');
+                document.getElementById('gold-tola').textContent = formatCurrency(Math.round(goldTolaNPR), 0, 'NPR');
+                document.getElementById('gold-kg').textContent = formatCurrency(Math.round(goldKgNPR), 0, 'NPR');
+                
+                document.getElementById('silver-usd').textContent = formatCurrency(silverPriceUSD, 3, 'USD');
+                document.getElementById('silver-npr').textContent = formatCurrency(silverNPR, 2, 'NPR');
+                document.getElementById('silver-tola').textContent = formatCurrency(silverTolaNPR, 2, 'NPR');
+                document.getElementById('silver-kg').textContent = formatCurrency(Math.round(silverKgNPR), 0, 'NPR');
+                
+                document.getElementById('usd-npr-rate').textContent = 
+                    `1 USD = NPR ${usdToNprRate.toFixed(2)}`;
+                
+                document.getElementById('update-time').textContent = 
+                    now.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+            }
+
+            // Fallback calculator update
+            function updateCompactCalculator() {
+                const metal = document.getElementById('calc-metal-compact').value;
+                const unit = document.getElementById('calc-unit-compact').value;
+                
+                const amountInput = document.getElementById('calc-amount-compact');
+                let amount = parseFloat(amountInput.value) || 1;
+                
+                // Validate amount
+                amount = Math.max(0.01, Math.min(1000000, amount));
+                amountInput.value = amount.toFixed(2);
+                
+                const currency = document.getElementById('calc-currency-compact').value;
+                
+                // Calculate unit prices
+                const goldTolaNPR = (goldPriceUSD * (TOLA_TO_GRAMS / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                const silverTolaNPR = (silverPriceUSD * (TOLA_TO_GRAMS / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                const goldKgNPR = (goldPriceUSD * (1000 / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                const silverKgNPR = (silverPriceUSD * (1000 / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                
+                let unitPrice, totalValue;
+                
+                // Determine unit price based on selection
+                if (unit === 'tola') {
+                    unitPrice = metal === 'gold' ? goldTolaNPR : silverTolaNPR;
+                    totalValue = unitPrice * amount;
+                } else { // kg
+                    unitPrice = metal === 'gold' ? goldKgNPR : silverKgNPR;
+                    totalValue = unitPrice * amount;
+                }
+                
+                // Handle invalid values
+                if (!isFinite(unitPrice) || !isFinite(totalValue)) {
+                    unitPrice = 0;
+                    totalValue = 0;
+                }
+                
+                // Convert to USD if selected
+                if (currency === 'usd') {
+                    unitPrice = unitPrice / usdToNprRate;
+                    totalValue = totalValue / usdToNprRate;
+                }
+                
+                // Update compact calculator display
+                document.getElementById('calc-unit-price-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(unitPrice, unit === 'tola' ? 0 : 0, 'USD') : 
+                    formatCurrency(unitPrice, unit === 'tola' ? 0 : 0, 'NPR');
+                
+                document.getElementById('calc-total-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(totalValue, 2, 'USD') : 
+                    formatCurrency(totalValue, 2, 'NPR');
+                
+                // Update class for NPR vs USD color
+                const totalElement = document.getElementById('calc-total-compact');
+                if (currency === 'npr') {
+                    totalElement.classList.add('npr-result-compact');
+                } else {
+                    totalElement.classList.remove('npr-result-compact');
+                }
+            }
+
+            function animatePriceUpdate(elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.classList.add('price-update');
+                    setTimeout(() => element.classList.remove('price-update'), 500);
+                }
+            }
+
+            // Theme toggle functionality with switch
+            function toggleTheme() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.body.setAttribute('data-theme', newTheme);
+                
+                const checkbox = document.getElementById('theme-toggle-checkbox');
+                checkbox.checked = newTheme === 'light';
+                
+                // Reinitialize TradingView chart with new theme
+                if (tvWidget) {
+                    setTimeout(() => {
+                        tvWidget.remove();
+                        tvWidget = null;
+                        initTradingViewChart();
+                    }, 100);
+                }
+                
+                // Save theme preference
+                localStorage.setItem('theme', newTheme);
+            }
+
+            // Initialize theme from localStorage or system preference
+            function initializeTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+                
+                document.body.setAttribute('data-theme', initialTheme);
+                
+                const checkbox = document.getElementById('theme-toggle-checkbox');
+                checkbox.checked = initialTheme === 'light';
+            }
+
+            function handleResize() {
+                if (tvWidget) {
+                    clearTimeout(window.resizeTimer);
+                    window.resizeTimer = setTimeout(() => initTradingViewChart(), 250);
+                }
+            }
+
+            // Event Listeners
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize theme
+                initializeTheme();
+                
+                // Set initial update time
+                const now = new Date();
+                document.getElementById('update-time').textContent = 
+                    now.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                
+                // Set initial loading states
+                document.getElementById('gold-usd').textContent = 'Loading...';
+                document.getElementById('silver-usd').textContent = 'Loading...';
+                document.getElementById('usd-npr-rate').textContent = 'Loading...';
+                document.getElementById('calc-total-compact').textContent = 'Loading...';
+                document.getElementById('calc-unit-price-compact').textContent = 'Loading...';
+                
+                // Initialize calculator with fallback
+                updateCompactCalculator();
+                
+                // Initialize TradingView chart
+                setTimeout(initTradingViewChart, 1000);
+                
+                // Initial price fetch
+                updatePriceVariables();
+                
+                // Set up periodic updates (every 3 seconds)
+                window.updatePriceInterval = setInterval(updatePriceVariables, 3000);
+                
+                // Timeframe buttons event listeners
+                document.querySelectorAll('.timeframe-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        document.querySelectorAll('.timeframe-btn').forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        currentTimeframe = this.getAttribute('data-timeframe');
+                        initTradingViewChart();
+                    });
+                });
+                
+                // Metal buttons event listeners
+                document.querySelectorAll('.metal-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        document.querySelectorAll('.metal-btn').forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        currentSymbol = this.getAttribute('data-metal') === 'gold' ? "XAUUSD" : "XAGUSD";
+                        initTradingViewChart();
+                    });
+                });
+                
+                // Compact calculator event listeners
+                ['calc-metal-compact', 'calc-unit-compact', 'calc-currency-compact'].forEach(id => {
+                    document.getElementById(id).addEventListener('change', function() {
+                        // Use backend data if available, otherwise fallback
+                        fetchPricesFromBackend().then(prices => {
+                            if (prices && prices.gold_usd) {
+                                updateCompactCalculatorWithBackendData(prices);
+                            } else {
+                                updateCompactCalculator();
+                            }
+                        }).catch(() => updateCompactCalculator());
+                    });
+                });
+                
+                const calcAmountCompact = document.getElementById('calc-amount-compact');
+                calcAmountCompact.addEventListener('input', function() {
+                    // Allow only numbers and decimal point
+                    this.value = this.value.replace(/[^0-9.]/g, '');
+                    const parts = this.value.split('.');
+                    if (parts.length > 2) {
+                        this.value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+                    // Use backend data if available, otherwise fallback
+                    fetchPricesFromBackend().then(prices => {
+                        if (prices && prices.gold_usd) {
+                            updateCompactCalculatorWithBackendData(prices);
+                        } else {
+                            updateCompactCalculator();
+                        }
+                    }).catch(() => updateCompactCalculator());
+                });
+                
+                calcAmountCompact.addEventListener('blur', function() {
+                    let value = parseFloat(this.value) || 1;
+                    value = Math.max(0.01, Math.min(1000000, value));
+                    this.value = value.toFixed(2);
+                    // Use backend data if available, otherwise fallback
+                    fetchPricesFromBackend().then(prices => {
+                        if (prices && prices.gold_usd) {
+                            updateCompactCalculatorWithBackendData(prices);
+                        } else {
+                            updateCompactCalculator();
+                        }
+                    }).catch(() => updateCompactCalculator());
+                });
+                
+                // Theme toggle checkbox event
+                document.getElementById('theme-toggle-checkbox').addEventListener('change', toggleTheme);
+                
+                // Window resize event
+                window.addEventListener('resize', handleResize);
+                
+                // Initial backend status
+                updateBackendStatus(false);
+                
+                // System theme change listener
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                    if (!localStorage.getItem('theme')) {
+                        const newTheme = e.matches ? 'dark' : 'light';
+                        document.body.setAttribute('data-theme', newTheme);
+                        const checkbox = document.getElementById('theme-toggle-checkbox');
+                        checkbox.checked = newTheme === 'light';
+                        if (tvWidget) {
+                            setTimeout(() => {
+                                tvWidget.remove();
+                                tvWidget = null;
+                                initTradingViewChart();
+                            }, 100);
+                        }
+                    }
+                });
+            });
+            
+            // Handle page visibility changes
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && window.updatePriceInterval) {
+                    // Stop updates when page is hidden
+                    clearInterval(window.updatePriceInterval);
+                    if (requestTimeout) {
+                        clearTimeout(requestTimeout);
+                    }
+                } else if (!document.hidden && !window.updatePriceInterval) {
+                    // Restart updates when page becomes visible
+                    window.updatePriceInterval = setInterval(updatePriceVariables, 3000);
+                }
+            });
+            
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', function() {
+                if (window.updatePriceInterval) {
+                    clearInterval(window.updatePriceInterval);
+                }
+                if (requestTimeout) {
+                    clearTimeout(requestTimeout);
+                }
+                if (tvWidget) {
+                    tvWidget.remove();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
