@@ -5,7 +5,7 @@ set -o errexit
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Collect static files
+python manage.py startapp api
 python manage.py collectstatic --noinput
 
 # Apply database migrations
