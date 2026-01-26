@@ -1,2 +1,0 @@
-Day 2 and I wanted to build a gold/ silver price tracker which compares the prices with the international market and eases for people
-I faced a serious issue which was that the international market price inflate in the nepali market i.e. the nepali market price is higher than the international market, so to coup with it I tried to find the premium rates which I couldnt calculate and had to make my own premium and hence the updated prices. IDk how they decide the price depending on what metrics like the tax i learnt was 15% or so but it just doesnt add up.
