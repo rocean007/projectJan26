@@ -1,11 +1,24 @@
 {
-  "buildCommand": "pip install --break-system-packages -r requirements.txt && python manage.py collectstatic --noinput",
-  "outputDirectory": "staticfiles",
-  "framework": ".",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/templates.html"
+      "src": "gold_tracker/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.11"
+      }
+    }
+  ],
+  "installCommand": "pip install --break-system-packages -r requirements.txt",
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "gold_tracker/wsgi.py"
     }
   ]
 }
