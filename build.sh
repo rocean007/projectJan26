@@ -2,11 +2,18 @@
 # build.sh
 set -o errexit
 
-# Install dependencies using uv (not pip)
-uv pip install -r requirements.txt
+# Force install with break-system-packages (Vercel allows this)
+pip install --break-system-packages -r requirements.txt
 
-# Collect static files
+# Create api app if it doesn't exist
+if [ ! -d "api" ]; then
+    python manage.py startapp api
+fi
+
+# Run collectstatic (outputs to staticfiles folder)
 python manage.py collectstatic --noinput
 
 # Apply database migrations
 python manage.py migrate
+
+echo "Build completed successfully!"
