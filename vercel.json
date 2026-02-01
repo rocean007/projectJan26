@@ -1,11 +1,14 @@
 {
-  "buildCommand": "pip install --break-system-packages -r requirements.txt && python manage.py collectstatic --noinput",
-  "outputDirectory": "staticfiles",
-  "framework": "django",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.11"
     }
-  ]
+  },
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "installCommand": "pip install --break-system-packages -r requirements.txt"
 }
