@@ -6,14 +6,6 @@
       "use": "@vercel/python",
       "config": {"maxLambdaSize": "15mb", "runtime": "python3.x"}
     },
-    {
-      "src": "build.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles",
-        "installCommand": "uv pip install --system -r requirements.txt"
-      }
-    }
   ],
   "routes": [
     {
