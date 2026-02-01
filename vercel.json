@@ -1,6 +1,11 @@
 {
   "buildCommand": "pip install --break-system-packages -r requirements.txt && python manage.py collectstatic --noinput",
-  "outputDirectory": ".",
-  "installCommand": "pip install --break-system-packages -r requirements.txt",
-  "framework": null
+  "outputDirectory": "staticfiles",
+  "framework": ".",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/templates.html"
+    }
+  ]
 }
