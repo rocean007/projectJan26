@@ -1,20 +1,11 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "pip install --break-system-packages -r requirements.txt && python manage.py collectstatic --noinput",
+  "outputDirectory": "staticfiles",
+  "framework": "django",
+  "rewrites": [
     {
-      "src": "gold_tracker/wsgi.py",
-      "use": "@vercel/python",
-      "config": {"maxLambdaSize": "15mb", "runtime": "python3.x"}
-    },
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "gold_tracker/wsgi.py"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
