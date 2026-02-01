@@ -2,11 +2,13 @@
 # build.sh
 set -o errexit
 
-# Install Python dependencies
-pip install -r requirements.txt
+# Use uv to install dependencies (correct for Vercel's environment)
+uv pip install --system -r requirements.txt
 
-python manage.py startapp api
+# If api directory doesn't exist, create it
+if [ ! -d "api" ]; then
+    python manage.py startapp api
+fi
+
 python manage.py collectstatic --noinput
-
-# Apply database migrations
 python manage.py migrate
