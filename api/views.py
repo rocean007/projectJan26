@@ -13,8 +13,8 @@ EXCHANGE_RATE_URL = 'https://open.er-api.com/v6/latest/USD'
 
 # Nepal Market Premiums
 NEPAL_PREMIUMS = {
-    'gold': 1.1008,    # 10.08% premium
-    'silver': 1.1266   # 12.66% premium
+    'gold': 1.1119,    # new% premium
+    'silver': 1.1678   # new
 }
 
 def fetch_gold_price():
@@ -170,8 +170,8 @@ def get_prices(request):
                 'unit': 'USD per troy ounce',
                 'conversion_note': '1 tola = 11.6638g, 1 troy ounce = 31.1035g',
                 'premium_applied': True,
-                'gold_premium_pct': 10.08,
-                'silver_premium_pct': 12.66
+                'gold_premium_pct': 11.19,
+                'silver_premium_pct': 16.78
             }
         }
         
@@ -226,8 +226,8 @@ def get_prices(request):
                 'timestamp': int(time.time()),
                 'source': 'Fallback due to error',
                 'premium_applied': True,
-                'gold_premium_pct': 10.08,
-                'silver_premium_pct': 12.66
+                'gold_premium_pct': 11.19,
+                'silver_premium_pct': 16.78
             }
         })
 
@@ -262,6 +262,6 @@ def health_check(request):
         'exchange_api_url': EXCHANGE_RATE_URL,
         'gold_api_url': 'https://api.gold-api.com/price/XAU',
         'premiums_applied': True,
-        'gold_premium': '10.08%',
-        'silver_premium': '12.66%'
+        'gold_premium': '11.19%',
+        'silver_premium': '16.78%'
     })
