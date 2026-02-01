@@ -2,19 +2,11 @@
 # build.sh
 set -o errexit
 
-python3 -m venv .venv
-source .venv/bin/activate
+# Install dependencies using uv (not pip)
+uv pip install -r requirements.txt
 
-pip install --upgrade pip
-
-pip install -r requirements.txt
-
-if [ ! -d "api" ]; then
-    python manage.py startapp api
-fi
-
+# Collect static files
 python manage.py collectstatic --noinput
 
+# Apply database migrations
 python manage.py migrate
-
-echo "Build completed successfully!"
