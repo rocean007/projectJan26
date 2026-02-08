@@ -52,7 +52,7 @@ CACHES = {
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles", "static")
 
-GOLD_API_KEY = 'your-goldapi-key-here'  # Change this
+GOLD_API_KEY = 'your-goldapi-key-here' 
 GOLD_API_BASE_URL = 'https://api.gold-api.com'
 EXCHANGE_RATE_URL = 'https://api.exchangerate-api.com/v4/latest/USD'
 

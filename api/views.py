@@ -13,8 +13,8 @@ EXCHANGE_RATE_URL = 'https://open.er-api.com/v6/latest/USD'
 
 # Nepal Market Premiums
 NEPAL_PREMIUMS = {
-    'gold': 1.1119,    # new% premium
-    'silver': 1.1678   # new
+    'gold': 1.1129,    # new% premium
+    'silver': 1.1825   # new
 }
 
 def fetch_gold_price():
@@ -44,7 +44,7 @@ def fetch_gold_price():
         print(f"❌ Gold API error: {e}")
     
     print("❌ Gold API failed, using approximation")
-    return 2345.67
+    return 4,968
 
 def fetch_silver_price():
     """Get silver price from Gold API"""
@@ -73,7 +73,7 @@ def fetch_silver_price():
         print(f"❌ Silver API error: {e}")
     
     print("❌ Silver API failed, using approximation")
-    return 27.89
+    return 80
 
 def fetch_exchange_rate():
     """Get USD to NPR rate from open.er-api.com"""
@@ -89,12 +89,12 @@ def fetch_exchange_rate():
                 return rate
             else:
                 print(f"⚠️ Exchange API returned error: {data.get('error-type', 'Unknown error')}")
-                return 133.65
+                return 144
     except Exception as e:
         print(f"❌ Exchange API error: {e}")
     
     # Fallback rate
-    return 133.65
+    return 144
 
 @require_GET
 @cache_page(30)
@@ -170,8 +170,8 @@ def get_prices(request):
                 'unit': 'USD per troy ounce',
                 'conversion_note': '1 tola = 11.6638g, 1 troy ounce = 31.1035g',
                 'premium_applied': True,
-                'gold_premium_pct': 11.19,
-                'silver_premium_pct': 16.78
+                'gold_premium_pct': 11.29,
+                'silver_premium_pct': 18.25
             }
         }
         
@@ -226,8 +226,8 @@ def get_prices(request):
                 'timestamp': int(time.time()),
                 'source': 'Fallback due to error',
                 'premium_applied': True,
-                'gold_premium_pct': 11.19,
-                'silver_premium_pct': 16.78
+                'gold_premium_pct': 11.29,
+                'silver_premium_pct': 18.25
             }
         })
 
@@ -262,6 +262,6 @@ def health_check(request):
         'exchange_api_url': EXCHANGE_RATE_URL,
         'gold_api_url': 'https://api.gold-api.com/price/XAU',
         'premiums_applied': True,
-        'gold_premium': '11.19%',
-        'silver_premium': '16.78%'
+        'gold_premium': '11.29%',
+        'silver_premium': '18.25%'
     })

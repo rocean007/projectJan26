@@ -968,9 +968,9 @@
             const GRAMS_PER_TROY_OUNCE = 31.1035;
             
             // State variables
-            let goldPriceUSD = 2150.75;
-            let silverPriceUSD = 24.38;
-            let usdToNprRate = 133.50;
+            let goldPriceUSD = 5000;
+            let silverPriceUSD = 80;
+            let usdToNprRate = 144;
             let currentTimeframe = '240';
             let currentSymbol = "XAUUSD";
             let tvWidget = null;
@@ -982,9 +982,9 @@
             
             // Cache for prices
             let priceCache = {
-                gold: 2150.75,
-                silver: 24.38,
-                exchange: 133.50,
+                gold: 5000,
+                silver: 80,
+                exchange: 144,
                 timestamp: Date.now()
             };
 
@@ -1137,13 +1137,13 @@
                     
                     // Fallback to default prices
                     return {
-                        gold_usd: 2150.75,
-                        silver_usd: 24.38,
-                        exchange_rate: 133.50,
-                        gold_npr: 287150.75,
-                        silver_npr: 3256.95,
-                        gold_tola_npr: 331898,
-                        silver_tola_npr: 3761,
+                        gold_usd: 5000,
+                        silver_usd: 80,
+                        exchange_rate: 144,
+                        gold_npr: 300000,
+                        silver_npr: 5000,
+                        gold_tola_npr: 301000,
+                        silver_tola_npr: 5000,
                         gold_kg_npr: 28475120,
                         silver_kg_npr: 322415
                     };
