@@ -6,6 +6,8 @@
     <title>सुन र चाँदीको लाइभ मूल्य</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://s3.tradingview.com/tv.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-primary: #0a0a14;
@@ -24,7 +26,7 @@
         }
 
         [data-theme="light"] {
-            --bg-primary: #f0f2f5;
+            --bg-primary: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             --bg-secondary: #ffffff;
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-primary: #333333;
@@ -227,6 +229,39 @@
             margin-bottom: 10px;
             word-break: break-word;
         }
+
+        .current-rate {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+#xau-npr {
+    color: var(--gold-color);
+    border-color: rgba(255, 215, 0, 0.4);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+#xag-npr {
+    color: var(--silver-color);
+    border-color: rgba(192, 192, 192, 0.4);
+    background: rgba(192, 192, 192, 0.05);
+}
+
+[data-theme="light"] #xau-npr {
+    border-color: rgba(212, 175, 55, 0.4);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+[data-theme="light"] #xag-npr {
+    border-color: rgba(128, 128, 128, 0.4);
+    background: rgba(128, 128, 128, 0.05);
+}
 
         .backend-status-compact {
             display: flex;
@@ -743,8 +778,6 @@
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body data-theme="dark">
     <div class="container">
@@ -772,8 +805,15 @@
             <div class="exchange-tracker-compact">
                 <h3><i class="fas fa-exchange-alt"></i> USD/NPR Live Exchange Rate</h3>
                 <div class="exchange-rate-compact" id="usd-npr-rate">1 USD = NPR 144</div>
-                <div class="current-rate" id="xau-npr"> सुन प्रति तोला: रु 300,000 </div>
-                <div class="current-rate" id="xag-npr"> चाँदी प्रति तोला: रु 4,000 </div>
+                <h3><i class="fas fa-exchange-alt" style="
+    background: linear-gradient(to right, #FFD700 0%, #FFA500 50%, #C0C0C0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  "></i>सुन र चाँदीको प्रति तोला मूल्य</h3>
+                <div class="current-rate" id="xau-npr"> सुन : रु 300,000 </div>
+                <div class="current-rate" id="xag-npr"> चाँदी : रु 4,000 </div>
                 <div class="backend-status-compact">
                     <span class="status-indicator status-connected" id="backend-status-indicator"></span>
                     <span id="backend-status-text">Backend Connected</span>
