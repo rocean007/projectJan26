@@ -771,7 +771,8 @@
         <div class="header-with-calculator">
             <div class="exchange-tracker-compact">
                 <h3><i class="fas fa-exchange-alt"></i> USD/NPR Live Exchange Rate</h3>
-                <div class="exchange-rate-compact" id="usd-npr-rate">1 USD = NPR 133.50</div>
+                <div class="exchange-rate-compact" id="usd-npr-rate">1 USD = NPR 144</div>
+                <div class="current-rate" id="xauxag-npr"></div>
                 <div class="backend-status-compact">
                     <span class="status-indicator status-connected" id="backend-status-indicator"></span>
                     <span id="backend-status-text">Backend Connected</span>
@@ -1070,7 +1071,6 @@
                         updateBackendStatus(true);
                         
                         // Return the data from backend exactly as it is
-                        // Your backend already calculates all these values
                         return {
                             gold_usd: safeGoldPrice,
                             silver_usd: safeSilverPrice,

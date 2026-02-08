@@ -132,11 +132,11 @@ def get_prices(request):
         silver_tola_npr_base = silver_usd * tola_to_ounce * usd_npr
         
         # Calculate BASE kg prices (without premium)
-        gold_kg_npr_base = gold_usd * kg_to_ounce * usd_npr
+        gold_kg_npr_base = gold_usd * kg_to_ounce * usd_npr 
         silver_kg_npr_base = silver_usd * kg_to_ounce * usd_npr
         
         # APPLY NEPAL PREMIUMS to NPR prices
-        gold_npr = gold_npr_base * NEPAL_PREMIUMS['gold']
+        gold_npr = gold_npr_base * NEPAL_PREMIUMS['gold'] 
         silver_npr = silver_npr_base * NEPAL_PREMIUMS['silver']
         
         # APPLY NEPAL PREMIUMS to tola prices
@@ -156,13 +156,13 @@ def get_prices(request):
                 'gold_usd': round(gold_usd, 2),
                 'silver_usd': round(silver_usd, 3),
                 'exchange_rate': round(usd_npr, 2),
-                'gold_npr': round(gold_npr, 2),  # Now with premium
-                'silver_npr': round(silver_npr, 2),  # Now with premium
+                'gold_npr': round((gold_npr / 100)) * 100,  # Now with premium
+                'silver_npr': round((silver_npr / 100)) * 100,  # Now with premium
                 # Silver tola with 2 decimals, gold tola as integer
-                'gold_tola_npr': round(gold_tola_npr),  # Now with premium
-                'silver_tola_npr': round(silver_tola_npr, 2),  # Now with premium
-                'gold_kg_npr': round(gold_kg_npr),  # Now with premium
-                'silver_kg_npr': round(silver_kg_npr),  # Now with premium
+                'gold_tola_npr': round((gold_tola_npr / 100)) * 100,  # Now with premium
+                'silver_tola_npr': round((silver_tola_npr / 10)) * 10,  # Now with premium
+                'gold_kg_npr': round((gold_kg_npr / 100)) * 100,  # Now with premium
+                'silver_kg_npr': round((silver_kg_npr / 100)) * 100,  # Now with premium
                 'timestamp': int(time.time()),
                 'timestamp_human': time.strftime('%Y-%m-%d %H:%M:%S'),
                 'source': 'Gold API + open.er-api.com',
@@ -182,9 +182,9 @@ def get_prices(request):
         print(f"❌ Error in get_prices: {e}")
         
         # Fallback with same API structure
-        gold_usd = 2345.67
-        silver_usd = 27.89
-        usd_npr = 133.65
+        gold_usd = 5000
+        silver_usd = 80
+        usd_npr = 144
         
         # Reuse the same calculation for consistency
         GRAMS_PER_TROY_OUNCE = 31.1035
