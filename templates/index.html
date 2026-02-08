@@ -1321,6 +1321,10 @@
                 // Update exchange rate
                 document.getElementById('usd-npr-rate').textContent = 
                     `1 USD = NPR ${prices.exchange_rate.toFixed(2)}`;
+
+                // Update xag xau rates
+                document.getElementById('xau-npr').textContent = `सुन प्रति तोला: रु ${prices.gold_tola_npr.toLocaleString('en-IN')}`;
+                document.getElementById('xag-npr').textContent = `चाँदी प्रति तोला: रु ${prices.silver_tola_npr.toLocaleString('en-IN')}`;
                 
                 // Update timestamp
                 document.getElementById('update-time').textContent = 
