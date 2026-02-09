@@ -4,5 +4,4 @@ from . import views
 urlpatterns = [
     path('prices/', views.get_prices, name='get_prices'),
     path('health/', views.health_check, name='health_check'),
-    path('favicon.webp', views.favicon_view),
 ]
