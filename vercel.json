@@ -17,10 +17,6 @@
       "dest": "/static/$1"
     },
     {
-      "src": "/favicon\\.webp",
-      "dest": "/templates/favicon.webp"
-    },
-    {
       "src": "/(.*)",
       "dest": "gold_tracker/wsgi.py"
     }

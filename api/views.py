@@ -6,6 +6,10 @@ from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET
 
+def favicon_view(request):
+    with open(os.path.join('templates', 'favicon.webp'), 'rb') as f:
+        return HttpResponse(f.read(), content_type='image/webp')
+        
 # API Config
 GOLD_API_KEY = os.environ.get('GOLD_API_KEY', 'f2db1aaaee18667e498f2a463de9795215b478a6a91abad885d14e6d5edc5b49')
 # Using the exchange rate API you requested
