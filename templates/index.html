@@ -294,6 +294,142 @@
             100% { opacity: 1; }
         }
 
+        /* NEW: Compact calculator styling */
+        .calculator-compact {
+            flex: 1;
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calculator-compact h3 {
+            color: var(--gold-color);
+            font-size: 1rem;
+            margin-bottom: 12px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .calculator-controls-compact {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .calculator-input-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .calculator-input-compact label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .calculator-input-compact select,
+        .calculator-input-compact input {
+            padding: 8px 10px;
+            background: rgba(30, 30, 50, 0.9);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            border-radius: 6px;
+            color: var(--gold-color);
+            font-size: 0.85rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .calculator-input-compact select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFD700' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-color: rgba(30, 30, 50, 0.9);
+            padding-right: 30px;
+            cursor: pointer;
+        }
+
+        .calculator-input-compact select option {
+            background: rgba(26, 26, 40, 0.95);
+            color: var(--gold-color);
+            padding: 8px;
+        }
+
+        [data-theme="light"] .calculator-input-compact select,
+        [data-theme="light"] .calculator-input-compact input {
+            background: rgba(240, 240, 250, 0.95);
+            border: 1.5px solid rgba(212, 175, 55, 0.4);
+            color: var(--gold-color);
+        }
+
+        [data-theme="light"] .calculator-input-compact select option {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--gold-color);
+        }
+
+        .calculator-input-compact input:focus,
+        .calculator-input-compact select:focus {
+            outline: none;
+            border-color: var(--gold-color);
+        }
+
+        .calculator-result-compact {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        [data-theme="light"] .calculator-result-compact {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .result-row-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="light"] .result-row-compact {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .result-row-compact:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .result-label-compact {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .result-value-compact {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gold-color);
+            font-family: 'Consolas', 'Monaco', monospace;
+            text-align: right;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .npr-result-compact {
+            color: var(--positive-color);
+        }
 
         /* Main header styling */
         header {
@@ -607,6 +743,10 @@
         }
 
         @media (max-width: 480px) {
+            .calculator-compact {
+                display: ]none;
+            }
+
             .chart-container {
                 height: 400px; /* UPDATED from 450px */
             }
@@ -683,7 +823,53 @@
                     <span id="backend-status-text">Backend Connected</span>
                 </div>
             </div>
+
+            <div class="calculator-compact">
+                <h3><i class="fas fa-calculator"></i> मूल्य क्यालकुलेटर</h3>
+                
+                <div class="calculator-controls-compact">
+                    <div class="calculator-input-compact">
+                        <label>धातु:</label>
+                        <select id="calc-metal-compact">
+                            <option value="gold">सुन</option>
+                            <option value="silver">चाँदी</option>
+                        </select>
+                    </div>
+                    
+                    <div class="calculator-input-compact">
+                        <label>एकाइ:</label>
+                        <select id="calc-unit-compact">
+                            <option value="tola">तोला</option>
+                            <option value="kg">किलो</option>
+                        </select>
+                    </div>
+                    
+                    <div class="calculator-input-compact">
+                        <label>मात्रा:</label>
+                        <input type="number" id="calc-amount-compact" min="0.01" step="0.01" value="1.00">
+                    </div>
+                    
+                    <div class="calculator-input-compact">
+                        <label>मुद्रा:</label>
+                        <select id="calc-currency-compact">
+                            <option value="npr">रुपैयाँ</option>
+                            <option value="usd">डलर</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="calculator-result-compact">
+                    <div class="result-row-compact">
+                        <span class="result-label-compact">कुल मूल्य:</span>
+                        <span id="calc-total-compact" class="result-value-compact npr-result-compact">NPR 284,473.69</span>
+                    </div>
+                    <div class="result-row-compact">
+                        <span class="result-label-compact">प्रति एकाइ:</span>
+                        <span id="calc-unit-price-compact" class="result-value-compact">NPR 284,473.69</span>
+                    </div>
+                </div>
             </div>
+        </div>
 
         <!-- Error message container -->
         <div class="error-message" id="error-message">
@@ -817,6 +1003,8 @@
         </footer>
     </div>
 
+    <!-- JavaScript Section - FIXED for Django Backend -->
+        <!-- JavaScript Section - FIXED for Django Backend -->
     <script>
         (function() {
             'use strict';
@@ -1195,6 +1383,63 @@
                 animatePriceUpdate('silver-usd');
             }
 
+            // Update compact calculator with BACKEND data (already calculated)
+            function updateCompactCalculatorWithBackendData(prices) {
+                const metal = document.getElementById('calc-metal-compact').value;
+                const unit = document.getElementById('calc-unit-compact').value;
+                
+                const amountInput = document.getElementById('calc-amount-compact');
+                let amount = parseFloat(amountInput.value) || 1;
+                
+                // Validate amount
+                amount = Math.max(0.01, Math.min(1000000, amount));
+                amountInput.value = amount.toFixed(2);
+                
+                const currency = document.getElementById('calc-currency-compact').value;
+                
+                // Get unit price DIRECTLY from backend data
+                let unitPrice, totalValue;
+                
+                if (unit === 'tola') {
+                    unitPrice = metal === 'gold' ? prices.gold_tola_npr : prices.silver_tola_npr;
+                } else { // kg
+                    unitPrice = metal === 'gold' ? prices.gold_kg_npr : prices.silver_kg_npr;
+                }
+                
+                totalValue = unitPrice * amount;
+                
+                // Handle invalid values
+                if (!isFinite(unitPrice) || !isFinite(totalValue)) {
+                    unitPrice = 0;
+                    totalValue = 0;
+                }
+                
+                // Convert to USD if selected
+                if (currency === 'usd') {
+                    unitPrice = unitPrice / prices.exchange_rate;
+                    totalValue = totalValue / prices.exchange_rate;
+                }
+                
+                // Update compact calculator display
+                document.getElementById('calc-unit-price-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(unitPrice, unit === 'tola' ? (metal === 'gold' ? 0 : 2) : 0, 'USD') : 
+                    formatCurrency(unitPrice, unit === 'tola' ? (metal === 'gold' ? 0 : 2) : 0, 'NPR');
+                
+                document.getElementById('calc-total-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(totalValue, 2, 'USD') : 
+                    formatCurrency(totalValue, 2, 'NPR');
+                
+                // Update class for NPR vs USD color
+                const totalElement = document.getElementById('calc-total-compact');
+                if (currency === 'npr') {
+                    totalElement.classList.add('npr-result-compact');
+                } else {
+                    totalElement.classList.remove('npr-result-compact');
+                }
+            }
+
             // Fallback display update (if API fails)
             function updateAllDisplays() {
                 // Calculate prices from current variables
@@ -1232,6 +1477,69 @@
                         minute: '2-digit',
                         second: '2-digit'
                     });
+            }
+
+            // Fallback calculator update
+            function updateCompactCalculator() {
+                const metal = document.getElementById('calc-metal-compact').value;
+                const unit = document.getElementById('calc-unit-compact').value;
+                
+                const amountInput = document.getElementById('calc-amount-compact');
+                let amount = parseFloat(amountInput.value) || 1;
+                
+                // Validate amount
+                amount = Math.max(0.01, Math.min(1000000, amount));
+                amountInput.value = amount.toFixed(2);
+                
+                const currency = document.getElementById('calc-currency-compact').value;
+                
+                // Calculate unit prices
+                const goldTolaNPR = (goldPriceUSD * (TOLA_TO_GRAMS / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                const silverTolaNPR = (silverPriceUSD * (TOLA_TO_GRAMS / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                const goldKgNPR = (goldPriceUSD * (1000 / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                const silverKgNPR = (silverPriceUSD * (1000 / GRAMS_PER_TROY_OUNCE)) * usdToNprRate;
+                
+                let unitPrice, totalValue;
+                
+                // Determine unit price based on selection
+                if (unit === 'tola') {
+                    unitPrice = metal === 'gold' ? goldTolaNPR : silverTolaNPR;
+                    totalValue = unitPrice * amount;
+                } else { // kg
+                    unitPrice = metal === 'gold' ? goldKgNPR : silverKgNPR;
+                    totalValue = unitPrice * amount;
+                }
+                
+                // Handle invalid values
+                if (!isFinite(unitPrice) || !isFinite(totalValue)) {
+                    unitPrice = 0;
+                    totalValue = 0;
+                }
+                
+                // Convert to USD if selected
+                if (currency === 'usd') {
+                    unitPrice = unitPrice / usdToNprRate;
+                    totalValue = totalValue / usdToNprRate;
+                }
+                
+                // Update compact calculator display
+                document.getElementById('calc-unit-price-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(unitPrice, unit === 'tola' ? 0 : 0, 'USD') : 
+                    formatCurrency(unitPrice, unit === 'tola' ? 0 : 0, 'NPR');
+                
+                document.getElementById('calc-total-compact').textContent = 
+                    currency === 'usd' ? 
+                    formatCurrency(totalValue, 2, 'USD') : 
+                    formatCurrency(totalValue, 2, 'NPR');
+                
+                // Update class for NPR vs USD color
+                const totalElement = document.getElementById('calc-total-compact');
+                if (currency === 'npr') {
+                    totalElement.classList.add('npr-result-compact');
+                } else {
+                    totalElement.classList.remove('npr-result-compact');
+                }
             }
 
             function animatePriceUpdate(elementId) {
@@ -1306,6 +1614,9 @@
                 document.getElementById('calc-total-compact').textContent = 'Loading...';
                 document.getElementById('calc-unit-price-compact').textContent = 'Loading...';
                 
+                // Initialize calculator with fallback
+                updateCompactCalculator();
+                
                 // Initialize TradingView chart
                 setTimeout(initTradingViewChart, 1000);
                 
@@ -1333,6 +1644,52 @@
                         currentSymbol = this.getAttribute('data-metal') === 'gold' ? "XAUUSD" : "XAGUSD";
                         initTradingViewChart();
                     });
+                });
+                
+                // Compact calculator event listeners
+                ['calc-metal-compact', 'calc-unit-compact', 'calc-currency-compact'].forEach(id => {
+                    document.getElementById(id).addEventListener('change', function() {
+                        // Use backend data if available, otherwise fallback
+                        fetchPricesFromBackend().then(prices => {
+                            if (prices && prices.gold_usd) {
+                                updateCompactCalculatorWithBackendData(prices);
+                            } else {
+                                updateCompactCalculator();
+                            }
+                        }).catch(() => updateCompactCalculator());
+                    });
+                });
+                
+                const calcAmountCompact = document.getElementById('calc-amount-compact');
+                calcAmountCompact.addEventListener('input', function() {
+                    // Allow only numbers and decimal point
+                    this.value = this.value.replace(/[^0-9.]/g, '');
+                    const parts = this.value.split('.');
+                    if (parts.length > 2) {
+                        this.value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+                    // Use backend data if available, otherwise fallback
+                    fetchPricesFromBackend().then(prices => {
+                        if (prices && prices.gold_usd) {
+                            updateCompactCalculatorWithBackendData(prices);
+                        } else {
+                            updateCompactCalculator();
+                        }
+                    }).catch(() => updateCompactCalculator());
+                });
+                
+                calcAmountCompact.addEventListener('blur', function() {
+                    let value = parseFloat(this.value) || 1;
+                    value = Math.max(0.01, Math.min(1000000, value));
+                    this.value = value.toFixed(2);
+                    // Use backend data if available, otherwise fallback
+                    fetchPricesFromBackend().then(prices => {
+                        if (prices && prices.gold_usd) {
+                            updateCompactCalculatorWithBackendData(prices);
+                        } else {
+                            updateCompactCalculator();
+                        }
+                    }).catch(() => updateCompactCalculator());
                 });
                 
                 // Theme toggle checkbox event
