@@ -17,8 +17,8 @@
       "dest": "/static/$1"
     },
     {
-      "src": "/favicon\\.(ico|webp|png|svg|jpg)",
-      "dest": "/public/favicon.webp"
+      "src": "/favicon.webp",
+      "dest": "/templates/favicon.webp"
     },
     {
       "src": "/(.*)",
