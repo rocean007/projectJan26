@@ -743,10 +743,6 @@
         }
 
         @media (max-width: 480px) {
-            .calculator-compact {
-                display: ]none;
-            }
-
             .chart-container {
                 height: 400px; /* UPDATED from 450px */
             }
@@ -755,8 +751,8 @@
                 height: 350px !important; /* UPDATED from 400px */
             }
             
-            .calculator-controls-compact {
-                grid-template-columns: 1fr;
+            .calculator-compact {
+                display: none;
             }
             
             .result-row-compact {
@@ -846,7 +842,7 @@
                     
                     <div class="calculator-input-compact">
                         <label>मात्रा:</label>
-                        <input type="number" id="calc-amount-compact" min="0.01" step="0.01" value="1.00">
+                        <input type="number" id="calc-amount-compact" min="0" step="1" value="1+">
                     </div>
                     
                     <div class="calculator-input-compact">
@@ -1003,8 +999,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript Section - FIXED for Django Backend -->
-        <!-- JavaScript Section - FIXED for Django Backend -->
     <script>
         (function() {
             'use strict';
@@ -1021,9 +1015,6 @@
             let currentSymbol = "XAUUSD";
             let tvWidget = null;
             
-            // IMPORTANT: Use relative URL for Django backend
-            // When HTML is served by Django, use relative path
-            // When testing locally, adjust this to match your setup
             const DJANGO_BACKEND_URL = '/api/prices/';
             
             // Cache for prices
@@ -1391,10 +1382,6 @@
                 const amountInput = document.getElementById('calc-amount-compact');
                 let amount = parseFloat(amountInput.value) || 1;
                 
-                // Validate amount
-                amount = Math.max(0.01, Math.min(1000000, amount));
-                amountInput.value = amount.toFixed(2);
-                
                 const currency = document.getElementById('calc-currency-compact').value;
                 
                 // Get unit price DIRECTLY from backend data
@@ -1486,10 +1473,6 @@
                 
                 const amountInput = document.getElementById('calc-amount-compact');
                 let amount = parseFloat(amountInput.value) || 1;
-                
-                // Validate amount
-                amount = Math.max(0.01, Math.min(1000000, amount));
-                amountInput.value = amount.toFixed(2);
                 
                 const currency = document.getElementById('calc-currency-compact').value;
                 
@@ -1680,9 +1663,6 @@
                 
                 calcAmountCompact.addEventListener('blur', function() {
                     let value = parseFloat(this.value) || 1;
-                    value = Math.max(0.01, Math.min(1000000, value));
-                    this.value = value.toFixed(2);
-                    // Use backend data if available, otherwise fallback
                     fetchPricesFromBackend().then(prices => {
                         if (prices && prices.gold_usd) {
                             updateCompactCalculatorWithBackendData(prices);
