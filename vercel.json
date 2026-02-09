@@ -4,8 +4,6 @@
     {
       "src": "gold_tracker/wsgi.py",
       "use": "@vercel/python",
-      "src": "templates/favicon.webp",
-      "use": "@vercel/static",
       "config": {
         "maxLambdaSize": "15mb",
         "runtime": "python3.11"
