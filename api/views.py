@@ -44,7 +44,7 @@ def fetch_gold_price():
         print(f"❌ Gold API error: {e}")
     
     print("❌ Gold API failed, using approximation")
-    return 4,968
+    return 4968
 
 def fetch_silver_price():
     """Get silver price from Gold API"""
