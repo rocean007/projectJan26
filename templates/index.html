@@ -1004,47 +1004,51 @@
             <div></div> <!-- Empty div for spacing -->
             <div class="theme-toggle-container">
                 <span class="theme-toggle-label">Theme:</span>
-                <label class="theme-toggle-switch">
-                    <input type="checkbox" id="theme-toggle-checkbox"  style="display: none;">
+                <label class="theme-toggle-switch" aria-label="Toggle dark/light theme">
+                    <input type="checkbox" id="theme-toggle-checkbox" style="display: none;">
                     <span class="theme-toggle-slider">
-                        <i class="fas fa-moon moon-icon"></i>
-                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon" aria-hidden="true"></i>
+                        <i class="fas fa-sun sun-icon" aria-hidden="true"></i>
                     </span>
                 </label>
             </div>
         </div>
 
-        <header>
-            <h1><i class="fas fa-gem"></i> सुन र चाँदीको लाइभ मूल्य</h1>
-            <p class="subtitle">Global Gold & Silver live prices with Real-time NPR Conversion</p>
+        <header role="banner">
+            <h1><i class="fas fa-gem" aria-hidden="true"></i> सुन र चाँदीको लाइभ मूल्य</h1>
+            <p class="subtitle">Aajako Sunko Bhav Nepal – Gold &amp; Silver Live Price Per Tola in NPR</p>
+            <!-- Machine-readable last updated, updated by JS -->
+            <time id="page-last-updated" datetime="" style="display:none;" itemprop="dateModified"></time>
         </header>
 
-        <!-- NEW: Compact header with exchange rate and calculator -->
+        <main role="main" id="main-content">
+
+        <!-- Compact header with exchange rate and calculator -->
         <div class="header-with-calculator">
-            <div class="exchange-tracker-compact">
-                <h3><i class="fas fa-exchange-alt"></i> USD/NPR Live Exchange Rate</h3>
-                <div class="exchange-rate-compact" id="usd-npr-rate">1 USD = NPR 144</div>
-                <h3><i class="fas fa-exchange-alt" style="
-    background: linear-gradient(to right, #FFD700 0%, #FFA500 50%, #C0C0C0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  "></i>सुन र चाँदीको प्रति तोला मूल्य (Real Time)</h3>
-                <div class="current-rate" id="xau-npr"> सुन : रु 300,000 </div>
-                <div class="current-rate" id="xag-npr"> चाँदी : रु 4,000 </div>
+            <div class="exchange-tracker-compact" role="region" aria-label="Live Exchange Rate and Tola Prices">
+                <h2 style="font-size:0.95rem;color:#3498db;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+                    <i class="fas fa-exchange-alt" aria-hidden="true"></i> USD/NPR Live Exchange Rate
+                </h2>
+                <div class="exchange-rate-compact" id="usd-npr-rate" aria-live="polite" aria-atomic="true">1 USD = NPR 144</div>
+                <h2 style="font-size:0.95rem;color:#3498db;margin-bottom:8px;margin-top:8px;display:flex;align-items:center;gap:8px;">
+                    <i class="fas fa-exchange-alt" aria-hidden="true" style="background:linear-gradient(to right,#FFD700 0%,#FFA500 50%,#C0C0C0 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;"></i>सुन र चाँदीको प्रति तोला मूल्य (Real Time)
+                </h2>
+                <div class="current-rate" id="xau-npr" aria-live="polite" aria-atomic="true"> सुन : रु 300,000 </div>
+                <div class="current-rate" id="xag-npr" aria-live="polite" aria-atomic="true"> चाँदी : रु 4,000 </div>
                 <div class="backend-status-compact">
-                    <span class="status-indicator status-connected" id="backend-status-indicator"></span>
+                    <span class="status-indicator status-connected" id="backend-status-indicator" aria-hidden="true"></span>
                     <span id="backend-status-text">Backend Connected</span>
                 </div>
             </div>
 
-            <div class="calculator-compact">
-                <h3><i class="fas fa-calculator"></i> मूल्य क्यालकुलेटर</h3>
+            <div class="calculator-compact" role="complementary" aria-label="मूल्य क्यालकुलेटर">
+                <h2 style="color:var(--gold-color);font-size:1rem;margin-bottom:12px;text-align:center;line-height:1.3;">
+                    <i class="fas fa-calculator" aria-hidden="true"></i> मूल्य क्यालकुलेटर
+                </h2>
                 
                 <div class="calculator-controls-compact">
                     <div class="calculator-input-compact">
-                        <label>धातु:</label>
+                        <label for="calc-metal-compact">धातु:</label>
                         <select id="calc-metal-compact">
                             <option value="gold">सुन</option>
                             <option value="silver">चाँदी</option>
@@ -1052,7 +1056,7 @@
                     </div>
                     
                     <div class="calculator-input-compact">
-                        <label>एकाइ:</label>
+                        <label for="calc-unit-compact">एकाइ:</label>
                         <select id="calc-unit-compact">
                             <option value="tola">तोला</option>
                             <option value="kg">किलो</option>
@@ -1060,12 +1064,12 @@
                     </div>
                     
                     <div class="calculator-input-compact">
-                        <label>मात्रा:</label>
+                        <label for="calc-amount-compact">मात्रा:</label>
                         <input type="number" id="calc-amount-compact" min="0" step="1" value="1">
                     </div>
                     
                     <div class="calculator-input-compact">
-                        <label>मुद्रा:</label>
+                        <label for="calc-currency-compact">मुद्रा:</label>
                         <select id="calc-currency-compact">
                             <option value="npr">रुपैयाँ</option>
                             <option value="usd">डलर</option>
@@ -1076,144 +1080,203 @@
                 <div class="calculator-result-compact">
                     <div class="result-row-compact">
                         <span class="result-label-compact">कुल मूल्य:</span>
-                        <span id="calc-total-compact" class="result-value-compact npr-result-compact">NPR 284,473.69</span>
+                        <span id="calc-total-compact" class="result-value-compact npr-result-compact" aria-live="polite">NPR 284,473.69</span>
                     </div>
                     <div class="result-row-compact">
                         <span class="result-label-compact">प्रति एकाइ:</span>
-                        <span id="calc-unit-price-compact" class="result-value-compact">NPR 284,473.69</span>
+                        <span id="calc-unit-price-compact" class="result-value-compact" aria-live="polite">NPR 284,473.69</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Error message container -->
-        <div class="error-message" id="error-message">
-            <i class="fas fa-exclamation-circle"></i>
+        <div class="error-message" id="error-message" role="alert" aria-live="assertive">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
             <span id="error-text">Unable to fetch prices. Using cached data.</span>
         </div>
 
         <div class="price-container">
-            <div class="price-card">
+            <article class="price-card" itemscope itemtype="https://schema.org/Product">
+                <meta itemprop="name" content="Gold (XAU) – Live Price Nepal">
+                <meta itemprop="description" content="Real-time international gold price in USD and NPR per troy ounce, per tola, and per kg">
                 <div class="card-header">
-                    <div class="metal-icon">
+                    <div class="metal-icon" aria-hidden="true">
                         <i class="fas fa-crown"></i>
                     </div>
                     <div>
-                        <div class="metal-name">GOLD (XAU/USD)</div>
+                        <h2 class="metal-name">GOLD (XAU/USD)</h2>
                     </div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-dollar-sign"></i> Live Price (USD):
+                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> Live Price (USD):
                     </div>
-                    <div id="gold-usd" class="price-value gold-price">$2,150.75</div>
+                    <div id="gold-usd" class="price-value gold-price" aria-live="polite" aria-atomic="true" itemprop="price">$2,150.75</div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-rupee-sign"></i> Price in NPR:
+                        <i class="fas fa-rupee-sign" aria-hidden="true"></i> Price in NPR (per oz):
                     </div>
-                    <div id="gold-npr" class="price-value npr-price">NPR 284,473.69</div>
+                    <div id="gold-npr" class="price-value npr-price" aria-live="polite" aria-atomic="true">NPR 284,473.69</div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-weight"></i> Per Tola (11.66g):
+                        <i class="fas fa-weight" aria-hidden="true"></i> Per Tola (11.66g):
                     </div>
-                    <div id="gold-tola" class="price-value gold-price">NPR 331,898</div>
+                    <div id="gold-tola" class="price-value gold-price" aria-live="polite" aria-atomic="true">NPR 331,898</div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-weight"></i> Per Kg:
+                        <i class="fas fa-weight" aria-hidden="true"></i> Per Kg:
                     </div>
-                    <div id="gold-kg" class="price-value gold-price">NPR 28,475,120</div>
+                    <div id="gold-kg" class="price-value gold-price" aria-live="polite" aria-atomic="true">NPR 28,475,120</div>
                 </div>
-            </div>
+            </article>
 
-            <div class="price-card">
+            <article class="price-card" itemscope itemtype="https://schema.org/Product">
+                <meta itemprop="name" content="Silver (XAG) – Live Price Nepal">
+                <meta itemprop="description" content="Real-time international silver price in USD and NPR per troy ounce, per tola, and per kg">
                 <div class="card-header">
-                    <div class="metal-icon silver-icon">
+                    <div class="metal-icon silver-icon" aria-hidden="true">
                         <i class="fas fa-ring"></i>
                     </div>
                     <div>
-                        <div class="metal-name silver-name">SILVER (XAG/USD)</div>
+                        <h2 class="metal-name silver-name">SILVER (XAG/USD)</h2>
                     </div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-dollar-sign"></i> Live Price (USD):
+                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> Live Price (USD):
                     </div>
-                    <div id="silver-usd" class="price-value silver-price">$24.38</div>
+                    <div id="silver-usd" class="price-value silver-price" aria-live="polite" aria-atomic="true" itemprop="price">$24.38</div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-rupee-sign"></i> Price in NPR:
+                        <i class="fas fa-rupee-sign" aria-hidden="true"></i> Price in NPR (per oz):
                     </div>
-                    <div id="silver-npr" class="price-value npr-price">NPR 3,256.95</div>
+                    <div id="silver-npr" class="price-value npr-price" aria-live="polite" aria-atomic="true">NPR 3,256.95</div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-weight"></i> Per Tola (11.66g):
+                        <i class="fas fa-weight" aria-hidden="true"></i> Per Tola (11.66g):
                     </div>
-                    <div id="silver-tola" class="price-value silver-price">NPR 3,761</div>
+                    <div id="silver-tola" class="price-value silver-price" aria-live="polite" aria-atomic="true">NPR 3,761</div>
                 </div>
                 
                 <div class="price-row">
                     <div class="currency-label">
-                        <i class="fas fa-weight"></i> Per Kg:
+                        <i class="fas fa-weight" aria-hidden="true"></i> Per Kg:
                     </div>
-                    <div id="silver-kg" class="price-value silver-price">NPR 322,415</div>
+                    <div id="silver-kg" class="price-value silver-price" aria-live="polite" aria-atomic="true">NPR 322,415</div>
                 </div>
-            </div>
+            </article>
         </div>
 
-        <div class="controls">
+        <div class="controls" role="group" aria-label="Chart controls">
             <div class="metal-toggle">
-                <button class="metal-btn active" data-metal="gold">
-                    <i class="fas fa-crown"></i> Gold (XAUUSD)
+                <button class="metal-btn active" data-metal="gold" aria-pressed="true">
+                    <i class="fas fa-crown" aria-hidden="true"></i> Gold (XAUUSD)
                 </button>
-                <button class="metal-btn" data-metal="silver">
-                    <i class="fas fa-ring"></i> Silver (XAGUSD)
+                <button class="metal-btn" data-metal="silver" aria-pressed="false">
+                    <i class="fas fa-ring" aria-hidden="true"></i> Silver (XAGUSD)
                 </button>
             </div>
             
-            <div class="timeframe-toggle">
-                <button class="timeframe-btn" data-timeframe="15">15M</button>
-                <button class="timeframe-btn" data-timeframe="60">1H</button>
-                <button class="timeframe-btn active" data-timeframe="240">4H</button>
-                <button class="timeframe-btn" data-timeframe="D">1D</button>
-                <button class="timeframe-btn" data-timeframe="W">1W</button>
+            <div class="timeframe-toggle" role="group" aria-label="Chart timeframe">
+                <button class="timeframe-btn" data-timeframe="15" aria-pressed="false">15M</button>
+                <button class="timeframe-btn" data-timeframe="60" aria-pressed="false">1H</button>
+                <button class="timeframe-btn active" data-timeframe="240" aria-pressed="true">4H</button>
+                <button class="timeframe-btn" data-timeframe="D" aria-pressed="false">1D</button>
+                <button class="timeframe-btn" data-timeframe="W" aria-pressed="false">1W</button>
             </div>
         </div>
 
-        <div class="chart-section">
+        <section class="chart-section" aria-label="Live TradingView Chart">
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="fas fa-chart-line"></i> TradingView Live Chart
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> TradingView Live Chart
                 </div>
                 <div id="tv-chart">
                     <div class="loading">
-                        <i class="fas fa-spinner fa-spin"></i> Loading TradingView Chart...
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Loading TradingView Chart...
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="last-update">
-            <i class="fas fa-sync-alt fa-spin"></i> <span class="update-speed">Real-time Updates (3s)</span> | 
+        <div class="last-update" role="status" aria-live="polite">
+            <i class="fas fa-sync-alt fa-spin" aria-hidden="true"></i> <span class="update-speed">Real-time Updates (3s)</span> | 
             Last Updated: <span id="update-time">Loading...</span> |
             Chart: <span id="current-symbol">XAU/USD</span> - <span id="current-timeframe">4H</span>
         </div>
 
-        <footer>
-            <p>Backend API & TradingView द्वारा संचालित | Real-time मूल्यहरू</p>
+        <!-- SEO: Crawlable FAQ section for Google rich results -->
+        <section class="faq-section" aria-label="सुन र चाँदीको मूल्यबारे प्रश्नहरू" style="margin-top:30px;padding:20px;background:var(--card-bg);border-radius:15px;border:1px solid var(--border-color);">
+            <h2 style="color:var(--gold-color);font-size:1.2rem;margin-bottom:20px;text-align:center;">
+                <i class="fas fa-question-circle" aria-hidden="true"></i> 
+                आजको सुन र चाँदीको मूल्यबारे सामान्य प्रश्नहरू
+            </h2>
+            <details style="margin-bottom:12px;padding:12px;background:rgba(0,0,0,0.1);border-radius:8px;border:1px solid var(--border-color);">
+                <summary style="cursor:pointer;font-weight:600;color:var(--text-primary);list-style:none;">
+                    <i class="fas fa-chevron-right" aria-hidden="true" style="margin-right:8px;color:var(--gold-color);"></i>
+                    आज सुनको भाउ नेपालमा कति छ? (Aajako sunko bhav kati cha?)
+                </summary>
+                <p style="margin-top:10px;color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
+                    आजको सुनको भाउ यो पेजमा हरेक ३ सेकेन्डमा अपडेट हुन्छ। २४K शुद्ध सुनको प्रति तोला (११.६६ ग्राम) मूल्य नेपाली रुपैयाँमा देखाइएको छ। यो मूल्य अन्तर्राष्ट्रिय बजार (XAU/USD) र USD/NPR विनिमय दर अनुसार FENEGOSIDA-aligned premium सहित गणना गरिन्छ।
+                </p>
+            </details>
+            <details style="margin-bottom:12px;padding:12px;background:rgba(0,0,0,0.1);border-radius:8px;border:1px solid var(--border-color);">
+                <summary style="cursor:pointer;font-weight:600;color:var(--text-primary);list-style:none;">
+                    <i class="fas fa-chevron-right" aria-hidden="true" style="margin-right:8px;color:var(--gold-color);"></i>
+                    FENEGOSIDA gold rate vs International gold price – फरक के हो?
+                </summary>
+                <p style="margin-top:10px;color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
+                    FENEGOSIDA (Federation of Nepal Gold and Silver Dealers' Association) ले नेपालमा सुन र चाँदीको आधिकारिक दैनिक खरिद/बिक्री दर तोक्छ। यसमा import duty, local premium, र dealer margin समावेश हुन्छ। SunchadiPrice ले international XAU/USD spot price लाई FENEGOSIDA-aligned premium सहित real-time मा NPR मा convert गरेर देखाउँछ।
+                </p>
+            </details>
+            <details style="margin-bottom:12px;padding:12px;background:rgba(0,0,0,0.1);border-radius:8px;border:1px solid var(--border-color);">
+                <summary style="cursor:pointer;font-weight:600;color:var(--text-primary);list-style:none;">
+                    <i class="fas fa-chevron-right" aria-hidden="true" style="margin-right:8px;color:var(--gold-color);"></i>
+                    नेपालमा सुनको मूल्यलाई के-के कुराले असर गर्छ?
+                </summary>
+                <p style="margin-top:10px;color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
+                    नेपालमा सुनको भाउमा यी कुराहरूले असर गर्छन्: (१) अन्तर्राष्ट्रिय XAU/USD spot price (COMEX/LBMA), (२) Nepal Rastra Bank को USD/NPR विनिमय दर, (३) FENEGOSIDA को दैनिक निर्णय, (४) import duty र सरकारी कर, (५) Dashain, Tihar, विवाह सिजनको माग, (६) भू-राजनीतिक घटना र US Federal Reserve नीति।
+                </p>
+            </details>
+            <details style="padding:12px;background:rgba(0,0,0,0.1);border-radius:8px;border:1px solid var(--border-color);">
+                <summary style="cursor:pointer;font-weight:600;color:var(--text-primary);list-style:none;">
+                    <i class="fas fa-chevron-right" aria-hidden="true" style="margin-right:8px;color:var(--gold-color);"></i>
+                    Gold price per tola Nepal कसरी गणना हुन्छ?
+                </summary>
+                <p style="margin-top:10px;color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
+                    <strong>Formula:</strong> Gold per tola (NPR) = (XAU/USD price) × (USD/NPR rate) × (11.6638 ÷ 31.1035) × Nepal premium factor<br>
+                    जहाँ: 1 tola = 11.6638 grams, 1 troy ounce = 31.1035 grams। यो गणना हरेक ३ सेकेन्डमा real-time data सहित अपडेट हुन्छ।
+                </p>
+            </details>
+        </section>
+
+        </main><!-- end #main-content -->
+
+        <footer role="contentinfo">
+            <p>
+                <strong>SunchadiPrice</strong> — Live Gold &amp; Silver Price Nepal | 
+                Data: <a href="https://gold-api.com" rel="noopener noreferrer" target="_blank" style="color:var(--gold-color);">Gold-API</a> + 
+                <a href="https://open.er-api.com" rel="noopener noreferrer" target="_blank" style="color:var(--gold-color);">Open Exchange Rates</a> + TradingView
+            </p>
+            <p style="margin-top:6px;font-size:0.8rem;">
+                सुनको भाउ नेपाल | Gold Price Nepal | Silver Price Nepal | आजको सुनको भाउ | चाँदीको भाउ
+            </p>
             <div class="disclaimer">
-                <i class="fas fa-exclamation-triangle"></i> यो प्रदर्शन अनुप्रयोग हो। वास्तविक व्यापारको लागि विश्वसनीय स्रोतहरू प्रयोग गर्नुहोस्।
+                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> 
+                यो informational purpose का लागि हो। वास्तविक व्यापार वा लगानीको लागि FENEGOSIDA वा आफ्नो banker सँग confirm गर्नुहोस्। Prices may differ from official FENEGOSIDA rates.
             </div>
         </footer>
     </div>
@@ -1587,7 +1650,71 @@
                         minute: '2-digit',
                         second: '2-digit'
                     });
-                
+
+                // Update machine-readable datetime for SEO
+                const isoNow = now.toISOString();
+                const timeEl = document.getElementById('page-last-updated');
+                if (timeEl) {
+                    timeEl.setAttribute('datetime', isoNow);
+                    timeEl.textContent = isoNow;
+                }
+
+                // Inject/update dynamic PriceSpecification JSON-LD for Google
+                const existingDynamicSchema = document.getElementById('dynamic-price-schema');
+                if (existingDynamicSchema) existingDynamicSchema.remove();
+                const dynamicSchema = document.createElement('script');
+                dynamicSchema.id = 'dynamic-price-schema';
+                dynamicSchema.type = 'application/ld+json';
+                dynamicSchema.textContent = JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "ItemList",
+                    "name": "Aajako Sunko Chandi Ko Bhav Nepal – Live Gold Silver Price",
+                    "description": "Real-time gold and silver prices in Nepal in NPR per tola, updated every 3 seconds",
+                    "url": "https://sunchadiprice.com",
+                    "dateModified": isoNow,
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "सुनको भाउ प्रति तोला (Gold Price Per Tola Nepal)",
+                            "item": {
+                                "@type": "Product",
+                                "name": "Gold (XAU) – Nepal Price Per Tola",
+                                "description": "24K gold price per tola in NPR – aajako sunko bhav Nepal",
+                                "offers": {
+                                    "@type": "Offer",
+                                    "priceCurrency": "NPR",
+                                    "price": String(prices.gold_tola_npr),
+                                    "priceValidUntil": new Date(Date.now() + 10000).toISOString(),
+                                    "availability": "https://schema.org/InStock",
+                                    "url": "https://sunchadiprice.com",
+                                    "seller": { "@type": "Organization", "name": "SunchadiPrice" }
+                                }
+                            }
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "चाँदीको भाउ प्रति तोला (Silver Price Per Tola Nepal)",
+                            "item": {
+                                "@type": "Product",
+                                "name": "Silver (XAG) – Nepal Price Per Tola",
+                                "description": "999 fine silver price per tola in NPR – chandi ko bhav Nepal",
+                                "offers": {
+                                    "@type": "Offer",
+                                    "priceCurrency": "NPR",
+                                    "price": String(prices.silver_tola_npr),
+                                    "priceValidUntil": new Date(Date.now() + 10000).toISOString(),
+                                    "availability": "https://schema.org/InStock",
+                                    "url": "https://sunchadiprice.com",
+                                    "seller": { "@type": "Organization", "name": "SunchadiPrice" }
+                                }
+                            }
+                        }
+                    ]
+                });
+                document.head.appendChild(dynamicSchema);
+
                 // Add animation for price updates
                 animatePriceUpdate('gold-usd');
                 animatePriceUpdate('silver-usd');
@@ -1831,18 +1958,26 @@
                 // Timeframe buttons event listeners
                 document.querySelectorAll('.timeframe-btn').forEach(button => {
                     button.addEventListener('click', function() {
-                        document.querySelectorAll('.timeframe-btn').forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.timeframe-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                            btn.setAttribute('aria-pressed', 'false');
+                        });
                         this.classList.add('active');
+                        this.setAttribute('aria-pressed', 'true');
                         currentTimeframe = this.getAttribute('data-timeframe');
                         initTradingViewChart();
                     });
                 });
-                
+
                 // Metal buttons event listeners
                 document.querySelectorAll('.metal-btn').forEach(button => {
                     button.addEventListener('click', function() {
-                        document.querySelectorAll('.metal-btn').forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.metal-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                            btn.setAttribute('aria-pressed', 'false');
+                        });
                         this.classList.add('active');
+                        this.setAttribute('aria-pressed', 'true');
                         currentSymbol = this.getAttribute('data-metal') === 'gold' ? "XAUUSD" : "XAGUSD";
                         initTradingViewChart();
                     });

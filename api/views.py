@@ -2,7 +2,7 @@ import requests
 import time
 import concurrent.futures
 import os
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET
 
@@ -176,7 +176,10 @@ def get_prices(request):
         }
         
         print(f"📤 Sending response: {response_data['data']}")
-        return JsonResponse(response_data)
+        json_response = JsonResponse(response_data)
+        json_response['Cache-Control'] = 'public, max-age=30, stale-while-revalidate=5'
+        json_response['X-Robots-Tag'] = 'noindex'
+        return json_response
         
     except Exception as e:
         print(f"❌ Error in get_prices: {e}")
@@ -264,4 +267,42 @@ def health_check(request):
         'premiums_applied': True,
         'gold_premium': '11.29%',
         'silver_premium': '18.25%'
+            'gold_api_url': 'https://api.gold-api.com/price/XAU',
+            'premiums_applied': True,
+            'gold_premium': '11.29%',
+            'silver_premium': '18.25%'
+        })
+
+
+    def robots_txt(request):
+        """Serve robots.txt for SEO crawl control"""
+        content = "\n".join([
+            "User-agent: *",
+            "Allow: /",
+            "Disallow: /api/health/",
+            "",
+            "Sitemap: https://sunchadiprice.com/sitemap.xml",
+            "",
+            "# SunchadiPrice – Live Gold Silver Price Nepal",
+        ])
+        return HttpResponse(content, content_type="text/plain")
+
+
+    def sitemap_xml(request):
+        """Serve dynamic sitemap.xml"""
+        lastmod = time.strftime('%Y-%m-%d')
+        content = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml">
+      <url>
+        <loc>https://sunchadiprice.com/</loc>
+        <lastmod>{lastmod}</lastmod>
+        <changefreq>always</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="ne" href="https://sunchadiprice.com/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sunchadiprice.com/en/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://sunchadiprice.com/"/>
+      </url>
+    </urlset>"""
+        return HttpResponse(content, content_type="application/xml")
     })
