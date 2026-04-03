@@ -1,10 +1,15 @@
-import requests
-import time
 import concurrent.futures
+import mimetypes
 import os
-from django.http import JsonResponse, HttpResponse
+from pathlib import Path
+import time
+
+import requests
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # API Config
 GOLD_API_KEY = os.environ.get('GOLD_API_KEY', 'f2db1aaaee18667e498f2a463de9795215b478a6a91abad885d14e6d5edc5b49')
@@ -16,6 +21,18 @@ NEPAL_PREMIUMS = {
     'gold': 1.1129,    # new% premium
     'silver': 1.1825   # new
 }
+
+
+@require_GET
+def favicon(request):
+    favicon_path = BASE_DIR / 'templates' / 'favicon.webp'
+    if not favicon_path.exists():
+        raise Http404('favicon not found')
+
+    content_type, _ = mimetypes.guess_type(favicon_path.name)
+    response = FileResponse(favicon_path.open('rb'), content_type=content_type or 'image/webp')
+    response['Cache-Control'] = 'public, max-age=86400'
+    return response
 
 def fetch_gold_price():
     """Get gold price from Gold API"""
